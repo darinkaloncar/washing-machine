@@ -182,19 +182,26 @@ void App::initGarments()
         {-0.78f, 0.45f}, {-0.78f, 0.20f}, {-0.78f, -0.05f}, {-0.78f, -0.30f}
     };
 
+    // 0: bela majica, 1: bele čarape, 2: bela haljina, 3: crvena majica
     for (int i = 0; i < 4; i++) {
         Garment g;
         g.pos = pos[i];
         g.size = { 0.25f, 0.25f };
+
         g.isRed = (i == 3);
 
-        if (g.isRed) { g.r = 1.0f; g.g = 0.15f; g.b = 0.15f; }
-        else { g.r = 1.0f; g.g = 1.0f;  g.b = 1.0f; }
+        if (g.isRed) { g.r = 1.0f; g.g = 0.15f; g.b = 0.15f; g.tex = texRedShirt_; }
+        else {
+            g.r = 1.0f; g.g = 1.0f; g.b = 1.0f;
+            if (i == 0) g.tex = texWhiteShirt_;
+            else if (i == 1) g.tex = texWhiteSocks_;
+            else if (i == 2) g.tex = texWhiteDress_;
+        }
 
-        g.tex = g.isRed ? texRedShirt_ : texWhiteShirt_;
         garments_.push_back(g);
     }
 }
+
 
 void App::recomputeRedInside()
 {
@@ -261,6 +268,8 @@ bool App::init(GLFWwindow* window)
 
     preprocessTexture(idTexture_, "res/id_card.png");
     preprocessTexture(texWhiteShirt_, "res/white_shirt.png");
+    preprocessTexture(texWhiteSocks_, "res/carape.png");
+    preprocessTexture(texWhiteDress_, "res/haljina.png");
     preprocessTexture(texRedShirt_, "res/red_shirt.png");
     preprocessTexture(texMachine_, "res/ves_masina_bez_vrata.png");
     preprocessTexture(texMachineWashOverlay_, "res/mas.png");
@@ -523,6 +532,9 @@ void App::cleanup()
     glDeleteVertexArrays(1, &VAO_machine_);
     glDeleteTextures(1, &texMachine_);
     glDeleteTextures(1, &texMachineWashOverlay_);
+    glDeleteTextures(1, &texWhiteSocks_);
+    glDeleteTextures(1, &texWhiteDress_);
+
     if (cursor_) glfwDestroyCursor(cursor_);
 }
 

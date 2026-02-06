@@ -15,19 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="rect.frag">
-      <Filter>Source Files</Filter>
-    </None>
-    <None Include="rect.vert">
-      <Filter>Source Files</Filter>
-    </None>
     <None Include="packages.config" />
-    <None Include="color.vert">
-      <Filter>Source Files</Filter>
-    </None>
-    <None Include="color.frag">
-      <Filter>Source Files</Filter>
-    </None>
     <None Include="id.vert">
       <Filter>Source Files</Filter>
     </None>
@@ -38,12 +26,6 @@
       <Filter>Source Files</Filter>
     </None>
     <None Include="basic.frag">
-      <Filter>Source Files</Filter>
-    </None>
-    <None Include="door.vert">
-      <Filter>Source Files</Filter>
-    </None>
-    <None Include="door.frag">
       <Filter>Source Files</Filter>
     </None>
   </ItemGroup>
@@ -86,6 +68,12 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="res\ves_masina_bez_vrata.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\carape.PNG">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\haljina.PNG">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

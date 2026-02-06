@@ -99,6 +99,9 @@ private:
 
     unsigned idTexture_ = 0;
     unsigned texWhiteShirt_ = 0;
+
+    unsigned texWhiteSocks_ = 0;
+    unsigned texWhiteDress_ = 0;
     unsigned texRedShirt_ = 0;
     unsigned texMachine_ = 0;
     unsigned texMachineWashOverlay_ = 0;

@@ -126,14 +126,8 @@
   <ItemGroup>
     <None Include="basic.frag" />
     <None Include="basic.vert" />
-    <None Include="door.frag" />
-    <None Include="door.vert" />
     <None Include="id.frag" />
     <None Include="id.vert" />
-    <None Include="rect.frag" />
-    <None Include="rect.vert" />
-    <None Include="color.frag" />
-    <None Include="color.vert" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -147,6 +141,8 @@
     <ClInclude Include="Util.h" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="res\carape.PNG" />
+    <Image Include="res\haljina.PNG" />
     <Image Include="res\id_card.png" />
     <Image Include="res\kursor.png" />
     <Image Include="res\mas.png" />
