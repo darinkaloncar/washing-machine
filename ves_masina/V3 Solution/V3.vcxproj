@@ -126,6 +126,8 @@
   <ItemGroup>
     <None Include="basic.frag" />
     <None Include="basic.vert" />
+    <None Include="drum.frag" />
+    <None Include="drum.vert" />
     <None Include="id.frag" />
     <None Include="id.vert" />
     <None Include="packages.config" />
@@ -142,6 +144,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\carape.PNG" />
+    <Image Include="res\drum.png" />
     <Image Include="res\haljina.PNG" />
     <Image Include="res\id_card.png" />
     <Image Include="res\kursor.png" />

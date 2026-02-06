@@ -67,6 +67,8 @@ private:
     void buildShirtQuad(float w, float h);
     void buildMachineQuad(float w, float h);
     void buildCircle(int segments);
+    void buildDrumQuad(float w, float h);
+
 
     void initGarments();
     void recomputeRedInside();
@@ -96,6 +98,8 @@ private:
 
     unsigned idShader_ = 0;
     unsigned basicShader_ = 0;
+    unsigned drumShader_ = 0;
+
 
     unsigned idTexture_ = 0;
     unsigned texWhiteShirt_ = 0;
@@ -114,6 +118,9 @@ private:
 
     unsigned VAO_shirt_ = 0, VBO_shirt_ = 0;
     unsigned VAO_machine_ = 0, VBO_machine_ = 0;
+
+    unsigned texDrum_ = 0;
+    unsigned VAO_drum_ = 0, VBO_drum_ = 0;
 
     float machineFadeT_ = 0.0f;
 

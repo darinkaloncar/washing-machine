@@ -248,6 +248,7 @@ bool App::init(GLFWwindow* window)
     const GLFWvidmode* mode = glfwGetVideoMode(monitor);
     screenWidth_ = mode->width;
     screenHeight_ = mode->height;
+    aspect_ = (float)screenWidth_ / (float)screenHeight_;
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -273,6 +274,17 @@ bool App::init(GLFWwindow* window)
     preprocessTexture(texRedShirt_, "res/red_shirt.png");
     preprocessTexture(texMachine_, "res/ves_masina_bez_vrata.png");
     preprocessTexture(texMachineWashOverlay_, "res/mas.png");
+    preprocessTexture(texDrum_, "res/drum.png");
+
+    drumShader_ = createShader("drum.vert", "drum.frag");
+
+    glUseProgram(drumShader_);
+    glUniform1f(glGetUniformLocation(drumShader_, "uScale"), 1.2f);
+    glUniform1i(glGetUniformLocation(drumShader_, "uTex"), 0);
+    glUniform1f(glGetUniformLocation(drumShader_, "uAspect"), aspect_);
+    glUniform2f(glGetUniformLocation(drumShader_, "uNudge"), 0.35f, -0.02f);
+    glUniform3f(glGetUniformLocation(drumShader_, "uTint"), 1.0f, 1.0f, 1.0f);
+    glUseProgram(0);
     
 
     // name and idx put in upper left corner
@@ -318,11 +330,11 @@ bool App::init(GLFWwindow* window)
     computeDrumFromMachineImage(0.50f, 0.48f, 0.20f);
     drumVisualRadius_ = drumRadius_ * 1.9f; 
     drumOrbitRadius_ = drumRadius_ * 0.65f;
-
+    float d = drumRadius_ * 3.30f;
+    buildDrumQuad(d, d);
     initGarments();
 
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    aspect_ = (float)screenWidth_ / (float)screenHeight_;
 
     return true;
 }
@@ -432,6 +444,28 @@ void App::update(double now, double dt)
 void App::render()
 {
     glClear(GL_COLOR_BUFFER_BIT);
+    glUseProgram(drumShader_);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texDrum_);
+
+    glUniform2f(glGetUniformLocation(drumShader_, "uOffset"),
+        drumCenter_.x, drumCenter_.y);
+
+    float rot = (state_ == AppState::WASHING) ? drumAngle_ : 0.0f;
+    glUniform1f(glGetUniformLocation(drumShader_, "uRotation"), rot);
+
+    float alpha = (state_ == AppState::WASHING) ? 0.90f : 1.0f;
+    glUniform1f(glGetUniformLocation(drumShader_, "uAlpha"), alpha);
+
+    glUniform3f(glGetUniformLocation(drumShader_, "uTint"), 1.0f, 1.0f, 1.0f);
+
+    glBindVertexArray(VAO_drum_);
+    glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+    glBindVertexArray(0);
+    glUseProgram(0);
+
+
 
     glUseProgram(idShader_);
     glActiveTexture(GL_TEXTURE0);
@@ -534,6 +568,11 @@ void App::cleanup()
     glDeleteTextures(1, &texMachineWashOverlay_);
     glDeleteTextures(1, &texWhiteSocks_);
     glDeleteTextures(1, &texWhiteDress_);
+    glDeleteTextures(1, &texDrum_);
+    glDeleteProgram(drumShader_);
+    glDeleteBuffers(1, &VBO_drum_);
+    glDeleteVertexArrays(1, &VAO_drum_);
+
 
     if (cursor_) glfwDestroyCursor(cursor_);
 }
@@ -625,4 +664,32 @@ void App::computeDrumFromMachineImage(float cxN, float cyN, float rN)
     drumCenter_.y = machinePos_.y + (0.5f - cyN) * machineH_;
 
     drumRadius_ = rN * machineW_;
+}
+
+void App::buildDrumQuad(float w, float h)
+{
+    float hw = w * 0.5f;
+    float hh = h * 0.5f;
+
+    float quad[] = {
+        -hw, +hh, 0,1,
+        -hw, -hh, 0,0,
+        +hw, -hh, 1,0,
+        +hw, +hh, 1,1
+    };
+
+    glGenVertexArrays(1, &VAO_drum_);
+    glGenBuffers(1, &VBO_drum_);
+
+    glBindVertexArray(VAO_drum_);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO_drum_);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(quad), quad, GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+
+    glBindVertexArray(0);
 }
